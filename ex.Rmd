@@ -46,7 +46,7 @@ And we then apply PCA to reduce the number of dimensions:
 ```{r}
 preProc = preProcess(raw_training[,-length(raw_training)], method="pca", thresh=0.9)
 training <- predict(preProc, raw_training[,-length(raw_training)])
-validation <- predict(preProc, raw_validation[,-length(raw_training)])
+validation <- predict(preProc, raw_validation[,-length(raw_validation)])
 ```
 
 Training
