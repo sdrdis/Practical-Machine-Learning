@@ -57,7 +57,7 @@ And we then apply PCA to reduce the number of dimensions:
 ```r
 preProc = preProcess(raw_training[,-length(raw_training)], method="pca", thresh=0.9)
 training <- predict(preProc, raw_training[,-length(raw_training)])
-validation <- predict(preProc, raw_validation[,-length(raw_training)])
+validation <- predict(preProc, raw_validation[,-length(raw_validation)])
 ```
 
 Training
@@ -89,7 +89,7 @@ sum(predicted == raw_validation$classe) / length(predicted)
 ```
 
 ```
-## [1] 0.9723
+## [1] 0.9678
 ```
 
 Here is the confusion matrix:
@@ -103,31 +103,31 @@ confusionMatrix(predicted, raw_validation$classe)
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 2206   37    4    6    2
-##          B    6 1456   21    3    7
-##          C    7   22 1323   49    6
-##          D   12    2   18 1225    8
-##          E    1    1    2    3 1419
+##          A 2202   49    8    2    0
+##          B   13 1433   22    2   12
+##          C   11   33 1322   57   11
+##          D    6    1   13 1225    8
+##          E    0    2    3    0 1411
 ## 
 ## Overall Statistics
 ##                                         
-##                Accuracy : 0.972         
-##                  95% CI : (0.968, 0.976)
+##                Accuracy : 0.968         
+##                  95% CI : (0.964, 0.972)
 ##     No Information Rate : 0.284         
-##     P-Value [Acc > NIR] : < 2e-16       
+##     P-Value [Acc > NIR] : <2e-16        
 ##                                         
-##                   Kappa : 0.965         
-##  Mcnemar's Test P-Value : 4.36e-07      
+##                   Kappa : 0.959         
+##  Mcnemar's Test P-Value : NA            
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity             0.988    0.959    0.967    0.953    0.984
-## Specificity             0.991    0.994    0.987    0.994    0.999
-## Pos Pred Value          0.978    0.975    0.940    0.968    0.995
-## Neg Pred Value          0.995    0.990    0.993    0.991    0.996
+## Sensitivity             0.987    0.944    0.966    0.953    0.979
+## Specificity             0.989    0.992    0.983    0.996    0.999
+## Pos Pred Value          0.974    0.967    0.922    0.978    0.996
+## Neg Pred Value          0.995    0.987    0.993    0.991    0.995
 ## Prevalence              0.284    0.193    0.174    0.164    0.184
-## Detection Rate          0.281    0.186    0.169    0.156    0.181
-## Detection Prevalence    0.287    0.190    0.179    0.161    0.182
-## Balanced Accuracy       0.990    0.977    0.977    0.973    0.991
+## Detection Rate          0.281    0.183    0.168    0.156    0.180
+## Detection Prevalence    0.288    0.189    0.183    0.160    0.180
+## Balanced Accuracy       0.988    0.968    0.975    0.974    0.989
 ```
