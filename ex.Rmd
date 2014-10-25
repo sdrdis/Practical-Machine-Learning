@@ -1,0 +1,74 @@
+Predicting if barell are lifted correctly
+=========================================
+
+This is my submission to the Pratical Machine Learning Course Project. I kept it very simple, so it should be fast to read :).
+
+Required libraries
+==================
+
+```{r}
+library(caret)
+```
+
+Data loading and processing
+===========================
+
+First let's load the data (the files are included in the repository):
+
+```{r}
+# columns with incorrect values are set to nan
+all_training <- read.csv('pml-training.csv', na.strings = c("", "NA", "#DIV/0!") )
+all_testing <- read.csv('pml-testing.csv', na.strings = c("", "NA", "#DIV/0!") )
+```
+
+Next, we have to remove the first 7 columns as they are of little use.
+```{r}
+all_training = all_training[,-(1:7)]
+all_testing = all_testing[,-(1:7)]
+```
+
+Removing all columns where there are at least one NA value (it might be a little extreme, but it is simpler like that).
+```{r}
+removeNaColumns     <- function(x) { x[, colSums(is.na(x)) == 0 ] }
+all_training <- removeNaColumns(all_training)
+all_testing <- removeNaColumns(all_testing)
+```
+
+
+Let's then separate our training data into two parts, for cross validation.
+```{r}
+partition  <- createDataPartition(all_training$classe, p=.6, list=FALSE)
+raw_training <- all_training[partition,]
+raw_validation  <- all_training[-partition,]
+```
+
+And we then apply PCA to reduce the number of dimensions:
+```{r}
+preProc = preProcess(raw_training[,-length(raw_training)], method="pca", thresh=0.9)
+training <- predict(preProc, raw_training[,-length(raw_training)])
+validation <- predict(preProc, raw_validation[,-length(raw_training)])
+```
+
+Training
+========
+We trained the model on Random forest:
+```{r}
+modFit <- train(raw_training$classe~ .,data=training,method="rf",prox=FALSE)
+```
+
+Results
+=======
+We can now predict our validation set:
+```{r}
+predicted = predict(modFit, validation)
+```
+
+The overall success rate is (that should be near our out of sample error):
+```{r}
+sum(predicted == raw_validation$classe) / length(predicted)
+```
+
+Here is the confusion matrix:
+```{r}
+confusionMatrix(predicted, raw_validation$classe)
+```
